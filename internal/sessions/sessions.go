@@ -208,6 +208,10 @@ type state struct {
 	MsgModel string `json:"msg_model,omitempty"`
 	MsgUse   Tokens `json:"msg_use"`
 	MsgDay   string `json:"msg_day,omitempty"`
+	// Claude Code: in a fork subagent's file, between its fork-context-ref
+	// line and its first prompt, where the reply that started the fork is
+	// copied from the parent's file, which counts it
+	ForkHead bool `json:"fork_head,omitempty"`
 	// Codex: the model in use, and its running total (input with cache) last seen
 	Model string  `json:"model,omitempty"`
 	Total *Tokens `json:"total,omitempty"`
@@ -782,7 +786,8 @@ func CachePath() string { return filepath.Join(filepath.Dir(catalog.CachePath())
 // 20: Codex's source and direct parent thread identity.
 // 21: Codex subagent nicknames and parent spawn task names.
 // 22: dsh's gateway conversation ids (Convs).
-const cacheVersion = 22
+// 23: a Claude Code fork subagent's copy of its parent's reply (ForkHead).
+const cacheVersion = 23
 
 type cacheFile struct {
 	Version int               `json:"version"`
